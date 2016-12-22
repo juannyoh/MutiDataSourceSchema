@@ -26,7 +26,7 @@ public class GuestServiceTest {
 	
 	@Test
 	public void testSaveGuest() {
-//		Login.setTenantId("egisp_dev2");
+		Login.setTenantId("egisp_dev");
 		Guest guest=new Guest();
 		guest.setAddress("zzzz");
 		guest.setCreattime(sdf.format(new Date()));
