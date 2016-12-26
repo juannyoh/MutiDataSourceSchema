@@ -2,7 +2,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="  
         http://www.springframework.org/schema/beans   
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
@@ -11,28 +10,21 @@
         http://www.springframework.org/schema/aop   
         http://www.springframework.org/schema/aop/spring-aop-3.0.xsd  
         http://www.springframework.org/schema/context  
-        http://www.springframework.org/schema/context/spring-context-3.0.xsd
-        http://www.springframework.org/schema/util 
-        http://www.springframework.org/schema/util/spring-util.xsd">
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<context:annotation-config />
 	<!-- 自动加载SERVICE DAO ACTION -->
 	<context:component-scan base-package="hotel.*" />
 
-	<util:properties id="configParam" location="classpath:config.properties" />
-	<!-- <util:list id="specialServiceMap" list-class="java.util.ArrayList"  value-type="java.util.Map">
-		<entry key="slave1" value="slaveDataSource1" />
-    </util:list>
- -->
 	<!-- 加载properties配置文件 -->
-	<bean id="propertyConfigurer"
+	<!-- <bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
 				<value>classpath:jdbc.properties</value>
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 
 	<bean id="parentDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<!-- 指定连接数据库连接池的最小连接数 -->
@@ -50,64 +42,23 @@
 		<property name="breakAfterAcquireFailure" value="true" />
 		<property name="testConnectionOnCheckout" value="false" />
 	</bean>
-	
-	
-	<!-- 主数据源 -->
-	<bean id="masterDataSource" parent="parentDataSource">
-		<property name="driverClass" value="${master.jdbc.driverClassName}" />
-		<property name="jdbcUrl" value="${master.jdbc.url}" />
-		<property name="user" value="${master.jdbc.username}" />
-		<property name="password" value="${master.jdbc.password}" />
-	</bean>
 
-	<!-- 从数据源1 -->
-	<bean id="slaveDataSource1" parent="parentDataSource">
-		<property name="driverClass" value="${slave1.jdbc.driverClassName}" />
-		<property name="jdbcUrl" value="${slave1.jdbc.url}" />
-		<property name="user" value="${slave1.jdbc.username}" />
-		<property name="password" value="${slave1.jdbc.password}" />
-	</bean>
+	<import resource="classpath:sessionFactory_1.xml" />
+	<import resource="classpath:sessionFactory_2.xml" />
 
-	<!-- 从数据源2 -->
-	<bean id="slaveDataSource2" parent="parentDataSource">
-		<property name="driverClass" value="${slave2.jdbc.driverClassName}" />
-		<property name="jdbcUrl" value="${slave2.jdbc.url}" />
-		<property name="user" value="${slave2.jdbc.username}" />
-		<property name="password" value="${slave2.jdbc.password}" />
-	</bean>
 
-	<bean id="dataSource" class="hotel.datasource.DynamicDataSource">
-		<property name="targetDataSources">
-			<map key-type="java.lang.String">
-				<entry key="slave1" value-ref="slaveDataSource1" />
-				<entry key="slave2" value-ref="slaveDataSource2" />
+	<bean id="sessionFactory" class="hotel.sessionfactory.DynamicSessionFactory">
+		<property name="defaultTargetSessionFactory" ref="s1_sessionFactory" />
+		<property name="targetSessionFactorys">
+			<map>
+				<entry value-ref="s1_sessionFactory" key="s1_sessionFactory" />
+				<entry value-ref="s2_sessionFactory" key="s2_sessionFactory" />
 			</map>
 		</property>
-		<property name="defaultTargetDataSource" ref="masterDataSource" />
 	</bean>
 
 	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
 		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-
-	<!-- 配置sessionFactory -->
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="dataSource" ref="dataSource"></property>
-		<property name="packagesToScan" value="hotel.model" />
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
-				<prop key="hibernate.connection.autocommit">true</prop>
-				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.format_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">none</prop>
-				<!-- <prop key="hibernate.default_schema">egisp_dev</prop> -->
-				<prop key="hibernate.multiTenancy">SCHEMA</prop>
-				<prop key="hibernate.tenant_identifier_resolver">hotel.dao.hibernate.TenantIdResolver</prop>
-				<prop key="hibernate.multi_tenant_connection_provider">hotel.dao.hibernate.SchemaBasedMultiTenantConnectionProvider</prop>
-			</props>
-		</property>
 	</bean>
 
 	<!-- 切换数据源 -->
@@ -118,11 +69,8 @@
 	</aop:config>
 
 	<!-- 配置事务管理器 -->
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
+	<bean id="transactionManager" class="hotel.sessionfactory.DynamicTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
 	<tx:annotation-driven transaction-manager="transactionManager" />

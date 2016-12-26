@@ -1,29 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-
-	<name>HotelSchemaBased</name>
 	<groupId>com.ouye.pro</groupId>
 	<artifactId>HotelSchemaBased</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	
+	<name>HotelSchemaBased</name>
 	<properties>
-		<spring.version>4.1.6.RELEASE</spring.version><!-- 3.2.6.RELEASE -->
+		<spring.version>4.1.6.RELEASE</spring.version>
 	</properties>
-
 	<dependencies>
-		<!-- spring -->
 		<dependency>
-		  <groupId>org.springframework</groupId>
-		  <artifactId>spring-orm</artifactId>
-		  <version>4.1.6.RELEASE</version>
-		</dependency>
-		<!-- <dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
-		</dependency> -->
+			<version>4.1.6.RELEASE</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
@@ -70,20 +62,16 @@
 			<artifactId>spring-beans</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		<!--dbcp -->
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
 		</dependency>
-		<!-- hibernate -->
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.1-api</artifactId>
 			<version>1.0.0.Final</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.hibernate.javax.persistence</groupId> <artifactId>hibernate-jpa-2.1-api</artifactId> 
-			<version>1.0.0.Final</version> </dependency> -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
@@ -112,6 +100,11 @@
 		</dependency>
 		<!--jackson -->
 		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.13</version>
@@ -121,7 +114,6 @@
 			<artifactId>jackson-core-asl</artifactId>
 			<version>1.9.13</version>
 		</dependency>
-		<!--httpclient -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -132,7 +124,6 @@
 			<artifactId>httpcore</artifactId>
 			<version>4.2.2</version>
 		</dependency>
-		<!-- mysql -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -148,7 +139,6 @@
 			<artifactId>hibernate-c3p0</artifactId>
 			<version>4.1.6.Final</version>
 		</dependency>
-		<!-- guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -179,41 +169,32 @@
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 		</dependency>
-		<!-- json-lib -->
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib</artifactId>
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
 		</dependency>
-
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>1.2.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>quartz</groupId>
 			<artifactId>quartz</artifactId>
 			<version>1.5.2</version>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-all</artifactId>
 			<version>1.3</version>
 		</dependency>
-
-		<!-- <dependency> <groupId>com.belerweb</groupId> <artifactId>weibo4j-oauth2</artifactId> 
-			<version>2.1.1-beta2-2</version> </dependency> -->
-		<!--httpclient -->
 		<dependency>
 			<groupId>apache-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
@@ -224,20 +205,16 @@
 			<artifactId>hirondelle-date4j</artifactId>
 			<version>1.5.1</version>
 		</dependency>
-
-		<!-- 超图地址匹配 -->
 		<dependency>
 			<groupId>com.supermap.addressMatch</groupId>
 			<artifactId>SMAddressMatch</artifactId>
 			<version>3.9.9-RELEASE</version>
 		</dependency>
-		<!-- ObjectJava -->
 		<dependency>
 			<groupId>com.supermap</groupId>
 			<artifactId>com.supermap.data</artifactId>
 			<version>7.1.2</version>
 		</dependency>
-		<!-- poi -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
@@ -248,20 +225,16 @@
 			<artifactId>AppPropertiesUtil</artifactId>
 			<version>1.2.0-RELEASE</version>
 		</dependency>
-
-		<!-- ehcache -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
 			<version>2.9.0</version>
 		</dependency>
-		<!-- 坐标转换经纬度墨卡托 -->
 		<dependency>
 			<groupId>com.supermap.tools</groupId>
 			<artifactId>CoordinateConvert</artifactId>
 			<version>2.0.0-RELEASE</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>dubbo</artifactId>
@@ -284,55 +257,18 @@
 			<version>3.3.3</version>
 			<exclusions>
 				<exclusion>
-					<groupId>com.sun.jmx</groupId>
 					<artifactId>jmxri</artifactId>
+					<groupId>com.sun.jmx</groupId>
 				</exclusion>
 				<exclusion>
-					<groupId>com.sun.jdmk</groupId>
 					<artifactId>jmxtools</artifactId>
+					<groupId>com.sun.jdmk</groupId>
 				</exclusion>
 				<exclusion>
-					<groupId>javax.jms</groupId>
 					<artifactId>jms</artifactId>
+					<groupId>javax.jms</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- <dependency>
-			<groupId>DubboHttp</groupId>
-			<artifactId>dubbohttp</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency> -->
-
-		<dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>antlr</artifactId>
-			<version>3.5.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>dom4j</groupId>
-			<artifactId>dom4j</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.javassist</groupId>
-			<artifactId>javassist</artifactId>
-			<version>3.19.0-GA</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.logging</groupId>
-			<artifactId>jboss-logging</artifactId>
-			<version>3.1.4.GA</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.javaee</groupId>
-			<artifactId>jboss-transaction-api-1.0.1_spec</artifactId>
-			<version>5.0.2.GA</version>
-		</dependency>
-
 	</dependencies>
-
 </project>

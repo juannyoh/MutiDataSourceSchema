@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"  
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"  
+    xsi:schemaLocation="  
+        http://www.springframework.org/schema/beans   
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+        http://www.springframework.org/schema/tx   
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd  
+        http://www.springframework.org/schema/aop   
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd  
+        http://www.springframework.org/schema/context  
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd">  
+  
+    <context:annotation-config />  
+    <!-- 自动加载SERVICE DAO ACTION -->  
+    <context:component-scan base-package="hotel.*" />  
+  
+    <!-- 加载properties配置文件 -->  
+    <bean id="propertyConfigurer"  
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="locations">  
+            <list>  
+                <value>classpath:jdbc_1.properties</value>  
+            </list>  
+        </property>  
+    </bean>  
+  
+    
+     <!-- 主数据源-->  
+    <bean id="s1_masterDataSource" parent="parentDataSource">  
+        <property name="driverClass" value="${master.jdbc.driverClassName}" />  
+        <property name="jdbcUrl" value="${master.jdbc.url}" />  
+        <property name="user" value="${master.jdbc.username}" />  
+        <property name="password" value="${master.jdbc.password}" />  
+    </bean>
+      
+    <!-- 从数据源1-->  
+    <bean id="s1_slaveDataSource1" parent="parentDataSource">  
+        <property name="driverClass" value="${slave1.jdbc.driverClassName}" />  
+        <property name="jdbcUrl" value="${slave1.jdbc.url}" />  
+        <property name="user" value="${slave1.jdbc.username}" />  
+        <property name="password" value="${slave1.jdbc.password}" />  
+    </bean>
+    
+    <!-- 从数据源2-->  
+    <bean id="s1_slaveDataSource2" parent="parentDataSource">  
+        <property name="driverClass" value="${slave2.jdbc.driverClassName}" />  
+        <property name="jdbcUrl" value="${slave2.jdbc.url}" />  
+        <property name="user" value="${slave2.jdbc.username}" />  
+        <property name="password" value="${slave2.jdbc.password}" />  
+    </bean>   
+  
+    <bean id="s1_dataSource" class="hotel.datasource.DynamicDataSource">  
+        <property name="targetDataSources">  
+            <map key-type="java.lang.String">  
+                <entry key="slave1" value-ref="s1_slaveDataSource1" />  
+                <entry key="slave2" value-ref="s1_slaveDataSource2" />  
+            </map>  
+        </property>  
+        <property name="defaultTargetDataSource" ref="s1_masterDataSource" />  
+    </bean>
+    
+    <!-- 配置sessionFactory -->  
+    <bean id="s1_sessionFactory"  
+        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >  
+        <property name="dataSource" ref="s1_dataSource"></property>  
+        <property name="packagesToScan" value="hotel.model" />  
+        <property name="hibernateProperties">  
+            <props>  
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
+                <prop key="hibernate.connection.autocommit">true</prop>
+                <prop key="hibernate.show_sql">true</prop>
+        		<prop key="hibernate.format_sql">true</prop>
+        		<prop key="hibernate.hbm2ddl.auto">none</prop>
+        		<prop key="hibernate.multiTenancy">SCHEMA</prop>
+				<prop key="hibernate.tenant_identifier_resolver">hotel.dao.hibernate.TenantIdResolver</prop>
+				<prop key="hibernate.multi_tenant_connection_provider">hotel.dao.hibernate.SchemaBasedMultiTenantConnectionProvider</prop>
+            </props>  
+        </property>  
+    </bean>  
+      
+    <!-- 切换数据源 -->  
+    <!-- <bean id="s1_dataSourceAdvice" class="hotel.datasource.DataSourceAdvice" />  
+    <aop:config>  
+        <aop:advisor  
+            pointcut="execution(* hotel.service..*Service.*(..))"  
+            advice-ref="s1_dataSourceAdvice" />  
+    </aop:config> -->  
+      
+    <!-- 配置事务管理器 -->  
+    <!-- <bean id="s1_transactionManager"  
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">  
+        <property name="sessionFactory">  
+            <ref bean="s1_sessionFactory" />  
+        </property>  
+    </bean>  
+    
+    <tx:annotation-driven transaction-manager="s1_transactionManager"/> -->
+    
+    <!--配置事务的传播特性 -->  
+    <!-- <tx:advice id="s1_txAdvice" transaction-manager="s1_transactionManager">  
+        <tx:attributes>  
+            对增、删、改方法进行事务支持  
+            <tx:method name="add*" propagation="REQUIRED" />  
+            <tx:method name="create*" propagation="REQUIRED" />  
+            <tx:method name="save*" propagation="REQUIRED" />  
+            <tx:method name="edit*" propagation="REQUIRED" />  
+            <tx:method name="update*" propagation="REQUIRED" />  
+            <tx:method name="delete*" propagation="REQUIRED" />  
+            <tx:method name="remove*" propagation="REQUIRED" />  
+            对查找方法进行只读事务  
+            <tx:method name="query*" propagation="SUPPORTS" read-only="true" />  
+            对其它方法进行只读事务  
+            <tx:method name="*" propagation="SUPPORTS" read-only="true" />  
+        </tx:attributes>  
+    </tx:advice>   -->
+    <!--那些类的哪些方法参与事务 -->  
+    <!-- <aop:config>  
+        <aop:advisor  
+            pointcut="execution(* hotel.service..*Service.*(..))"  
+            advice-ref="s1_txAdvice" />  
+        <aop:advisor  
+            pointcut="execution(* hotel.service..*ServiceImpl.*(..))"  
+            advice-ref="s1_txAdvice" />  
+    </aop:config>  --> 
+      
+</beans>  

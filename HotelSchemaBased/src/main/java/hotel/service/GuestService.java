@@ -9,5 +9,8 @@ public interface GuestService {
 	public void saveGuest(Guest guest);
 	
 	public List<Guest> queryAll();
+	
+	
+	public void updateMethod();
 
 }
